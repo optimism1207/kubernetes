@@ -11,7 +11,7 @@
     >http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
     > EOF
 
-#关闭selinux，防火墙开放相应节点或关闭
+#关闭selinux，防火墙开放相应节点或关闭，8080不能忘
     
 ![image](https://github.com/optimism1207/kubernetes/blob/master/required%20ports.png)
 
@@ -33,15 +33,15 @@
 
 #国内无法直接拉取镜像，用github存放Dockerfile，由dockerhub自动生成docker镜像再拉取，用dockertag.sh拉取并自动完成改名
 
-#初始化master节点
+#初始化master节点，后面两条命令换用户要再执行
     
     sudo kubeadm init --kubernetes-version 1.13.3 --apiserver-advertise-address 192.168.80.7 --pod-network-cidr=10.244.0.0/16
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#默认秘钥24小时过期，创建永不过期的token
+#默认秘钥24小时过期，创建永不过期的token，命令保存下来
 
-    sudo kubeadm token create --print-join-command --ttl 0
+    kubeadm token create --print-join-command --ttl 0
 
 #节点执行
     
@@ -52,6 +52,13 @@
     sudo kubectl drain node1 --delete-local-data --force --ignore-daemonsets && kubectl delete node node1
     sudo kubeadm reset
 
+#设置flannel网络
+    
+    wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml 
+    kubectl apply -f kube-flannel.yml
+    #删除
+    kubectl delete -f kube-flannel.yml
+    
 #删除pod、deployment
     
     检查是否创建了deployments任务：kubectl get deployments
