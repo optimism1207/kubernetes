@@ -1,4 +1,3 @@
-
 #添加阿里云yum源
 
     cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -12,7 +11,10 @@
     >http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
     > EOF
 
-#关闭selinux
+#关闭selinux，防火墙开放相应节点或关闭
+    
+    ![image](https://github.com/optimism1207/kubernetes/blob/master/required%20ports.png)
+
 
 #安装前所需要的镜像
 
@@ -31,10 +33,9 @@
 
 #国内无法直接拉取镜像，用github存放Dockerfile，由dockerhub自动生成docker镜像再拉取，用dockertag.sh拉取并自动完成改名
 
-
 #初始化master节点
     
-    sudo kubeadm init --apiserver-advertise-address 192.168.80.7 --pod-network-cidr=10.244.0.0/16
+    sudo kubeadm init --kubernetes-version 1.13.3 --apiserver-advertise-address 192.168.80.7 --pod-network-cidr=10.244.0.0/16
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
