@@ -13,7 +13,7 @@
 
 #关闭selinux，防火墙开放相应节点或关闭
     
-    ![image](https://github.com/optimism1207/kubernetes/blob/master/required%20ports.png)
+![image](https://github.com/optimism1207/kubernetes/blob/master/required%20ports.png)
 
 
 #安装前所需要的镜像
