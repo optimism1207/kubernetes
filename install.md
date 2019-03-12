@@ -29,6 +29,9 @@
     k8s.gcr.io/pause               3.1                 7d6e17dbc867        3 days ago          742 kB
     k8s.gcr.io/kube-proxy          v1.13.3             76ab9d4cefc9        3 days ago          80.3 MB
 
+#国内无法直接拉取镜像，用github存放Dockerfile，由dockerhub自动生成docker镜像再拉取，用dockertag.sh拉取并自动完成改名
+
+
 #初始化master节点
     
     sudo kubeadm init --apiserver-advertise-address 192.168.80.7 --pod-network-cidr=10.244.0.0/16
