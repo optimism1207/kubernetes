@@ -11,7 +11,7 @@
     >http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
     > EOF
 
-#关闭selinux，防火墙开放相应节点或关闭，8080不能忘
+#关闭selinux，防火墙开放相应节点或关闭，vmware里试了下，光开这些端口还不够，使用flannel总是无法通信，留着之后再研究，先关了防火墙
     
 ![image](https://github.com/optimism1207/kubernetes/blob/master/required%20ports.png)
 
@@ -43,21 +43,21 @@
 
     kubeadm token create --print-join-command --ttl 0
 
-#节点执行
-    
-    sudo kubeadm join 192.168.80.7:6443 --token 7z7omc.frnfb2tdfw2k6uh5 --discovery-token-ca-cert-hash sha256:b719ef6c25c935eb867439daaecaab422147e55a754be7d751b524136625466f
-
-#删除节点
-
-    sudo kubectl drain node1 --delete-local-data --force --ignore-daemonsets && kubectl delete node node1
-    sudo kubeadm reset
-
 #设置flannel网络
     
     wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml 
     kubectl apply -f kube-flannel.yml
     #删除
     kubectl delete -f kube-flannel.yml
+
+#节点执行
+    
+    sudo kubeadm join 192.168.80.7:6443 --token 7z7omc.frnfb2tdfw2k6uh5 --discovery-token-ca-cert-hash sha256:b719ef6c25c935eb867439daaecaab422147e55a754be7d751b524136625466f
+
+#删除节点
+
+    kubectl drain node1 --delete-local-data --force --ignore-daemonsets && kubectl delete node node1
+    sudo kubeadm reset
     
 #删除pod、deployment
     
